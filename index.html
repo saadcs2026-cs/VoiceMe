@@ -1,1 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoiceCare — Family Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>🧡 VoiceCare</h1>
+    <div id="familyBox">
+      <span id="familyLabel">Family Code: <strong id="familyCode">—</strong></span>
+      <button id="copyCodeBtn" class="btn small">Copy</button>
+      <button id="switchFamilyBtn" class="btn small ghost">Switch Family</button>
+    </div>
+  </header>
 
+  <main>
+    <section id="joinSection" class="card hidden">
+      <h2>Join a Family</h2>
+      <p>Enter the 6-character family code shared by the elder's family, or create a new family.</p>
+      <div class="join-row">
+        <input id="joinCode" maxlength="6" placeholder="e.g. ABC123" />
+        <button id="joinBtn" class="btn">Join</button>
+      </div>
+      <div class="join-row">
+        <button id="createFamilyBtn" class="btn ghost">Create New Family</button>
+      </div>
+      <p id="joinError" class="error"></p>
+    </section>
+
+    <section id="dashboardSection" class="hidden">
+      <div class="grid">
+        <div class="card">
+          <h2>➕ New Reminder</h2>
+          <label>Medicine Name</label>
+          <input id="medName" placeholder="e.g. Blood Pressure Pill" />
+
+          <label>Reminder Time</label>
+          <input id="medTime" type="time" />
+
+          <label>Voice Note (max 30 seconds)</label>
+          <div class="rec-row">
+            <button id="recordBtn" class="btn record">🎙️ Record</button>
+            <span id="recTimer">00:00</span>
+            <span id="recStatus"></span>
+          </div>
+          <audio id="recPreview" controls class="hidden"></audio>
+
+          <button id="saveBtn" class="btn primary big">Save Reminder</button>
+          <p id="saveStatus" class="muted"></p>
+        </div>
+
+        <div class="card">
+          <h2>📋 Active Reminders</h2>
+          <ul id="reminderList" class="reminder-list"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a href="elder.html" class="muted" target="_blank">Open Elder View (use on elder's device) →</a>
+  </footer>
+
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>
