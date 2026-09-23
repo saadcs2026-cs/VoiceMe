@@ -1,1 +1,15 @@
-
+{
+  "hosting": {
+    "public": ".",
+    "ignore": ["functions/**", "node_modules/**", "firestore.rules", "storage.rules", "firebase.json", "*.md"]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "functions": {
+    "source": "functions"
+  }
+}
