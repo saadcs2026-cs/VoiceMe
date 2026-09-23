@@ -1,31 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VoiceCare — Elder Mode</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoiceCare - Elder View</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="elder-body">
-  <!-- Waiting screen -->
-  <div id="waitingScreen" class="elder-waiting">
-    <h1>🌙 Waiting for reminders...</h1>
-    <p class="clock" id="liveClock">--:--</p>
-    <p class="muted">Family code: <strong id="elderFamilyCode">—</strong></p>
-    <p class="muted" id="pushStatus"></p>
-    <p class="tip">💡 Keep this page open. You'll also get a notification even if you close it.</p>
+<body style="background:#0f172a; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:20px; text-align:center;">
+
+  <div id="elderSetupView">
+    <h2 style="margin-bottom:10px;">📱 Elder Device Setup</h2>
+    <p style="color:#94a3b8; margin-bottom:20px;">Enter the family code given by your family dashboard.</p>
+    <input type="text" id="elderFamilyCodeInput" placeholder="ENTER CODE" style="max-width:300px; margin-bottom:15px; text-align:center;" maxlength="6" />
+    <button class="btn-primary" id="saveElderCodeBtn" style="max-width:300px;">Connect Device</button>
   </div>
 
-  <!-- Full-screen alarm overlay -->
-  <div id="alarmOverlay" class="alarm-overlay hidden">
-    <div class="alarm-content">
-      <h1 id="alarmMedicine">💊 Medicine</h1>
-      <p class="alarm-time" id="alarmTime"></p>
-      <audio id="alarmAudio" loop></audio>
-      <button id="tookItBtn" class="took-btn">✅ I TOOK MY MEDICINE</button>
+  <div id="elderActiveView" class="hidden">
+    <div style="font-size:4rem; font-weight:900; color:#38bdf8; font-variant-numeric:tabular-nums;" id="liveClock">00:00:00</div>
+    <p style="color:#fbbf24; margin-top:10px; font-size:1.1rem;">Listening for family medicine reminders...</p>
+    <p style="color:#94a3b8; margin-top:5px; font-size:0.9rem;">Connected Family Code: <strong id="connectedCodeText" style="color:#fff;"></strong></p>
+  </div>
+
+  <!-- Alarm Popup Overlay -->
+  <div id="alarmOverlay" class="hidden" style="position:fixed; inset:0; background:rgba(15,23,42,0.98); z-index:999; display:flex; align-items:center; justify-content:center; padding:20px;">
+    <div style="max-width:500px; width:100%;">
+      <h2 style="font-size:2.5rem; color:#f87171; margin-bottom:10px;">⏰ Time for Medicine!</h2>
+      <h3 id="alarmMedName" style="font-size:1.8rem; color:#fff; margin-bottom:20px;">Medicine Name</h3>
+      <p id="alarmElderName" style="font-size:1.2rem; color:#38bdf8; margin-bottom:30px;"></p>
+      
+      <audio id="alarmAudioPlayer" controls autoplay style="width:100%; margin-bottom:30px; height:50px;"></audio>
+      
+      <button id="dismissAlarmBtn" style="background:#22c55e; color:#fff; border:none; width:100%; padding:20px; border-radius:18px; font-size:1.3rem; font-weight:800; cursor:pointer;">I Took My Medicine ✅</button>
     </div>
   </div>
 
-  <script type="module" src="js/elder.js"></script>
+  <script type="module">
+    import { db } from './js/firebase-config.js';
+    import { collection, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const savedCode = localStorage.getItem("elder_family_code");
+    const setupView = document.getElementById("elderSetupView");
+    const activeView = document.getElementById("elderActiveView");
+
+    if (savedCode) {
+      activateElderMode(savedCode);
+    }
+
+    document.getElementById("saveElderCodeBtn").onclick = () => {
+      const code = document.getElementById("elderFamilyCodeInput").value.trim().toUpperCase();
+      if (code.length === 6) {
+        localStorage.setItem("elder_family_code", code);
+        activateElderMode(code);
+      } else {
+        alert("Please enter a valid 6-character code.");
+      }
+    };
+
+    function activateElderMode(code) {
+      setupView.classList.add("hidden");
+      activeView.classList.remove("hidden");
+      document.getElementById("connectedCodeText").innerText = code;
+
+      // Live Clock
+      setInterval(() => {
+        const now = new Date();
+        document.getElementById("liveClock").innerText = now.toLocaleTimeString();
+      }, 1000);
+
+      // Check Reminders every 10 seconds
+      setInterval(() => checkReminders(code), 10000);
+    }
+
+    async function checkReminders(code) {
+      const now = new Date();
+      const currentTime = now.toTimeString().slice(0, 5); // Format "HH:MM"
+
+      const q = query(collection(db, "reminders"), where("familyCode", "==", code));
+      const snapshot = await getDocs(q);
+
+      snapshot.forEach(async (documentSnap) => {
+        const data = documentSnap.data();
+        if (data.time === currentTime && data.status === "pending") {
+          triggerAlarm(data, documentSnap.id);
+        }
+      });
+    }
+
+    function triggerAlarm(data, docId) {
+      const overlay = document.getElementById("alarmOverlay");
+      overlay.classList.remove("hidden");
+      document.getElementById("alarmMedName").innerText = data.medicine;
+      document.getElementById("alarmElderName").innerText = `For: ${data.targetElder}`;
+      
+      const player = document.getElementById("alarmAudioPlayer");
+      player.src = data.audioUrl;
+      player.play().catch(() => {});
+
+      document.getElementById("dismissAlarmBtn").onclick = async () => {
+        player.pause();
+        overlay.classList.add("hidden");
+        // Delete or mark complete so it doesn't loop
+        await deleteDoc(doc(db, "reminders", docId));
+      };
+    }
+  </script>
 </body>
 </html>
