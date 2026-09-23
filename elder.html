@@ -1,1 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VoiceCare — Elder Mode</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="elder-body">
+  <!-- Waiting screen -->
+  <div id="waitingScreen" class="elder-waiting">
+    <h1>🌙 Waiting for reminders...</h1>
+    <p class="clock" id="liveClock">--:--</p>
+    <p class="muted">Family code: <strong id="elderFamilyCode">—</strong></p>
+    <p class="muted" id="pushStatus"></p>
+    <p class="tip">💡 Keep this page open. You'll also get a notification even if you close it.</p>
+  </div>
 
+  <!-- Full-screen alarm overlay -->
+  <div id="alarmOverlay" class="alarm-overlay hidden">
+    <div class="alarm-content">
+      <h1 id="alarmMedicine">💊 Medicine</h1>
+      <p class="alarm-time" id="alarmTime"></p>
+      <audio id="alarmAudio" loop></audio>
+      <button id="tookItBtn" class="took-btn">✅ I TOOK MY MEDICINE</button>
+    </div>
+  </div>
+
+  <script type="module" src="js/elder.js"></script>
+</body>
+</html>
