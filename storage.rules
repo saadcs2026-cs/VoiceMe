@@ -1,1 +1,11 @@
-
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /voice-notes/{familyCode}/{fileName} {
+      allow read: if true;
+      allow write: if familyCode.size() == 6
+                   && request.resource.size < 2 * 1024 * 1024
+                   && request.resource.contentType.matches('audio/.*');
+    }
+  }
+}
