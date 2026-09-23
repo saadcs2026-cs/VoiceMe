@@ -1,12 +1,13 @@
 :root {
-  --bg-color: #f4f7fc;
+  --bg-color: #f8fafc;
   --card-bg: #ffffff;
   --primary: #4f46e5;
+  --primary-hover: #4338ca;
   --primary-gradient: linear-gradient(135deg, #6366f1, #4f46e5);
-  --text-main: #1e293b;
+  --text-main: #0f172a;
   --text-muted: #64748b;
-  --shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.08), 0 8px 10px -6px rgba(79, 70, 229, 0.08);
-  --border-radius: 24px;
+  --shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.08), 0 8px 10px -6px rgba(79, 70, 229, 0.04);
+  --border-radius: 20px;
 }
 
 * {
@@ -20,7 +21,7 @@ body {
   background-color: var(--bg-color);
   color: var(--text-main);
   min-height: 100vh;
-  padding-bottom: 40px;
+  padding-bottom: 50px;
 }
 
 .hidden {
@@ -38,6 +39,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .logo-wrap {
@@ -46,58 +48,48 @@ body {
   gap: 10px;
 }
 
-.logo-icon {
-  font-size: 1.5rem;
-}
-
 .app-header h1 {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--primary);
 }
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .code-pill {
   background: #eef2ff;
   color: #4f46e5;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.85rem;
   font-weight: 600;
 }
 
-/* Main Container Layout */
+/* Layout Container */
 .app-container {
-  max-width: 600px;
-  margin: 24px auto;
-  padding: 0 16px;
+  max-width: 540px;
+  margin: 30px auto;
+  padding: 0 20px;
 }
 
-/* Pastel Cards */
+/* Cards */
 .pastel-card {
   background: var(--card-bg);
   border-radius: var(--border-radius);
   padding: 28px;
   box-shadow: var(--shadow);
-  margin-bottom: 20px;
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
 }
 
 .greeting-banner {
   background: linear-gradient(135deg, #e0e7ff, #ede9fe);
-  border-radius: 20px;
+  border-radius: 16px;
   padding: 20px;
   margin-bottom: 20px;
   border: 1px solid #c7d2fe;
 }
 
 .greeting-banner h2 {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: #312e81;
   margin-bottom: 4px;
 }
@@ -108,13 +100,13 @@ body {
 }
 
 h3 {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 16px;
   color: var(--text-main);
 }
 
-/* Form Controls */
+/* Form Inputs */
 label {
   display: block;
   font-size: 0.85rem;
@@ -129,11 +121,11 @@ input, select {
   padding: 14px 16px;
   background: #f8fafc;
   border: 2px solid #e2e8f0;
-  border-radius: 14px;
+  border-radius: 12px;
   font-size: 1rem;
   color: var(--text-main);
   outline: none;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 input:focus, select:focus {
@@ -142,20 +134,28 @@ input:focus, select:focus {
   box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
 }
 
-/* Buttons */
+/* Buttons (Fixed alignment & appearance) */
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
 .btn-primary {
   background: var(--primary-gradient);
   color: white;
   border: none;
   width: 100%;
   padding: 15px;
-  border-radius: 16px;
+  border-radius: 14px;
   font-size: 1rem;
   font-weight: 700;
-  cursor: pointer;
   box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.4);
-  transition: transform 0.1s, opacity 0.2s;
+  transition: transform 0.1s ease, opacity 0.2s ease;
   margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
 .btn-primary:active {
@@ -166,11 +166,11 @@ input:focus, select:focus {
   background: #f1f5f9;
   color: var(--text-muted);
   border: none;
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: 10px;
   font-weight: 600;
-  font-size: 0.8rem;
-  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s;
 }
 
 .btn-subtle:hover {
@@ -191,29 +191,24 @@ input:focus, select:focus {
   color: #dc2626;
   border: 2px dashed #fca5a5;
   padding: 14px;
-  border-radius: 14px;
+  border-radius: 12px;
   font-weight: 700;
-  cursor: pointer;
   text-align: center;
+  transition: all 0.2s;
 }
 
 .record-btn.recording {
   background: #dc2626;
   color: white;
   border-style: solid;
+  border-color: #b91c1c;
   animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
   0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
-  70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+  70% { transform: scale(1.01); box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
   100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
-}
-
-#recTimer {
-  font-weight: 700;
-  color: #dc2626;
-  font-variant-numeric: tabular-nums;
 }
 
 audio {
@@ -222,14 +217,7 @@ audio {
   border-radius: 8px;
 }
 
-/* Elders Management List */
-.elder-inputs-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
+/* Reminders List */
 .reminders-list {
   list-style: none;
   display: flex;
@@ -242,19 +230,20 @@ audio {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   padding: 14px 18px;
-  border-radius: 16px;
+  border-radius: 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .reminder-info h4 {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--text-main);
+  font-weight: 600;
 }
 
 .reminder-info p {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
   margin-top: 2px;
 }
@@ -266,7 +255,6 @@ audio {
   padding: 8px 12px;
   border-radius: 10px;
   font-weight: 600;
-  cursor: pointer;
   font-size: 0.8rem;
 }
 
