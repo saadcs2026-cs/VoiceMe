@@ -7,63 +7,95 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header class="topbar">
-    <h1>🧡 VoiceCare</h1>
-    <div id="familyBox">
-      <span id="familyLabel">Family Code: <strong id="familyCode">—</strong></span>
-      <button id="copyCodeBtn" class="btn small">Copy</button>
-      <button id="switchFamilyBtn" class="btn small ghost">Switch Family</button>
+  <!-- Top Header Bar -->
+  <header class="app-header">
+    <div class="logo-area">
+      <span class="logo-icon">❤️</span>
+      <h1>VoiceCare</h1>
+    </div>
+    <div class="header-actions">
+      <div class="code-badge" id="headerCodeArea">
+        <span>Family Code:</span> <strong id="displayFamilyCode">—</strong>
+        <button class="btn-mini" id="copyCodeBtn">Copy</button>
+      </div>
+      <button class="btn-secondary" id="switchFamilyBtn">Switch Family</button>
     </div>
   </header>
 
-  <main>
-    <section id="joinSection" class="card hidden">
-      <h2>Join a Family</h2>
-      <p>Enter the 6-character family code shared by the elder's family, or create a new family.</p>
-      <div class="join-row">
-        <input id="joinCode" maxlength="6" placeholder="e.g. ABC123" />
-        <button id="joinBtn" class="btn">Join</button>
-      </div>
-      <div class="join-row">
-        <button id="createFamilyBtn" class="btn ghost">Create New Family</button>
-      </div>
-      <p id="joinError" class="error"></p>
-    </section>
-
-    <section id="dashboardSection" class="hidden">
-      <div class="grid">
-        <div class="card">
-          <h2>➕ New Reminder</h2>
-          <label>Medicine Name</label>
-          <input id="medName" placeholder="e.g. Blood Pressure Pill" />
-
-          <label>Reminder Time</label>
-          <input id="medTime" type="time" />
-
-          <label>Voice Note (max 30 seconds)</label>
-          <div class="rec-row">
-            <button id="recordBtn" class="btn record">🎙️ Record</button>
-            <span id="recTimer">00:00</span>
-            <span id="recStatus"></span>
+  <!-- Main Container -->
+  <main class="main-container">
+    
+    <!-- VIEW 1: WELCOME / SETUP (Shown when no family code exists) -->
+    <section id="welcomeSection" class="hero-section">
+      <div class="hero-card">
+        <h2>Welcome to VoiceCare 👋</h2>
+        <p>Keep your elders connected with personalized, scheduled voice reminders.</p>
+        
+        <div class="action-grid">
+          <!-- CREATE FAMILY CARD -->
+          <div class="action-box create-box">
+            <h3>New Here?</h3>
+            <p>Generate a unique code for your family dashboard and elder device.</p>
+            <button class="btn-glow primary-glow" id="createFamilyBtn">✨ Create New Family</button>
           </div>
-          <audio id="recPreview" controls class="hidden"></audio>
 
-          <button id="saveBtn" class="btn primary big">Save Reminder</button>
-          <p id="saveStatus" class="muted"></p>
+          <!-- JOIN FAMILY CARD -->
+          <div class="action-box join-box">
+            <h3>Have a Code?</h3>
+            <p>Enter the 6-character code provided by your family member.</p>
+            <div class="input-group">
+              <input type="text" id="joinCodeInput" placeholder="e.g. A9B2X4" maxlength="6" />
+              <button class="btn-glow secondary-glow" id="joinFamilyBtn">Join Family</button>
+            </div>
+            <span class="error-text" id="joinError"></span>
+          </div>
         </div>
 
-        <div class="card">
-          <h2>📋 Active Reminders</h2>
-          <ul id="reminderList" class="reminder-list"></ul>
+        <div class="elder-link-wrap">
+          <a href="elder.html" class="elder-link-btn">📱 Open Elder View (For Elder's Device) →</a>
         </div>
       </div>
     </section>
+
+    <!-- VIEW 2: DASHBOARD (Shown once a family is active) -->
+    <section id="dashboardSection" class="dashboard-section hidden">
+      <div class="dashboard-grid">
+        
+        <!-- CARD: ADD REMINDER -->
+        <div class="glass-card">
+          <h3>🎙️ Create Voice Reminder</h3>
+          <form id="reminderForm">
+            <label>Medicine / Task Name</label>
+            <input type="text" id="medName" placeholder="e.g. Blood Pressure Pill" required />
+
+            <label>Time</label>
+            <input type="time" id="medTime" required />
+
+            <label>Record Your Voice Message</label>
+            <div class="recorder-box">
+              <button type="button" id="recordBtn" class="btn-record">🔴 Hold to Record / Click to Start</button>
+              <span id="recTimer">00:00</span>
+            </div>
+            <audio id="recPreview" controls class="hidden"></audio>
+
+            <button type="submit" class="btn-glow primary-glow full-width" id="saveReminderBtn">Save & Schedule Reminder</button>
+          </form>
+        </div>
+
+        <!-- CARD: ACTIVE REMINDERS -->
+        <div class="glass-card">
+          <h3>📋 Scheduled Reminders</h3>
+          <ul id="reminderList" class="reminder-list">
+            <p class="muted">No reminders yet. Create one on the left!</p>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
-  <footer>
-    <a href="elder.html" class="muted" target="_blank">Open Elder View (use on elder's device) →</a>
-  </footer>
-
-  <script type="module" src="js/dashboard.js"></script>
+  <!-- Firebase & App Scripts -->
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
